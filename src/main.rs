@@ -1,3 +1,4 @@
+use std::env;
 use std::process::Command;
 use std::time::Duration;
 use std::{thread, vec};
@@ -130,9 +131,17 @@ fn solve_knight_tour(
 }
 
 fn main() {
-    const SIZE_X: usize = 5;
-    const SIZE_Y: usize = 6;
-    let mut solution_board = vec![vec![-1; SIZE_X]; SIZE_Y];
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 3 {
+        println!("Please provide size_x and size_y as command line arguments.");
+        return;
+    }
+
+    let size_x: usize = args[1].parse().unwrap_or(5);
+    let size_y: usize = args[2].parse().unwrap_or(6);
+
+    let mut solution_board = vec![vec![-1; size_x]; size_y];
     let possible_x_moves: [i32; 8] = [2, 1, -1, -2, -2, -1, 1, 2];
     let possible_y_moves: [i32; 8] = [1, 2, 2, 1, -1, -2, -2, -1];
 
@@ -145,14 +154,14 @@ fn main() {
         1,
         0,
         0,
-        SIZE_X,
-        SIZE_Y,
+        size_x,
+        size_y,
     ) == false
     {
         let _ = Command::new("clear").status();
         println!("Solution does not exist for the given board dimensions.");
     } else {
         let _ = Command::new("clear").status();
-        print_board(SIZE_X as i32, SIZE_Y as i32, &solution_board);
+        print_board(size_x as i32, size_y as i32, &solution_board);
     }
 }
